@@ -66,8 +66,6 @@ def obter_colaborador(request, colaborador_id):
         'email': colaborador.email,
         'telefone': colaborador.telefone,
         'idade': colaborador.idade,
-        'cpf': colaborador.cpf,
-        'texto': colaborador.texto,
     }
     return JsonResponse(dados)
 
