@@ -1,0 +1,205 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'bootstrap/cssbots/bootstrap.min.css' %}">
+    <title>Dashboard</title>
+</head>
+<body class="bg-gray-100">
+    <div class="bg-white shadow-md">
+        <header class="absolute inset-x-0 top-0 z-50">
+            <nav class="flex items-center justify-between px-6 py-4 lg:px-8" aria-label="Global">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="{% url 'home' %}" class="-m-1.5 p-1.5 flex items-center">
+                        <img class="h-8 w-auto" src="https://tailwindui.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="Logo">
+                        <h1 class="ml-2 text-lg font-bold text-gray-900">BioEnergia</h1>
+                    </a>
+                </div>
+
+                <!-- Menu Desktop -->
+                <div class="hidden lg:flex lg:gap-x-12">
+                    <a href="{% url 'home' %}" class="text-sm font-semibold text-gray-900 hover:text-indigo-600">Início</a>
+                    <a href="#" class="text-sm font-semibold text-gray-900 hover:text-indigo-600">Sobre</a>
+                    <a href="#" class="text-sm font-semibold text-gray-900 hover:text-indigo-600">Serviços</a>
+                    <a href="#" class="text-sm font-semibold text-gray-900 hover:text-indigo-600">Contato</a>
+                </div>
+
+                <!-- Acesso do usuário -->
+                <div class="hidden lg:flex items-center gap-x-4">
+                    {% if not request.user.is_authenticated %}
+                        <a href="{% url 'login' %}" class="text-sm font-semibold text-gray-900 hover:text-indigo-600">Login</a>
+                    {% else %}
+                        <form action="{% url 'logout' %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="text-sm font-semibold text-gray-900 hover:text-red-600">Logout</button>
+                        </form>
+                    {% endif %}
+
+                    {% if exibir_botao_dashboard %}
+                        <a href="{% url 'dashboard' %}" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                            Acessar Dashboard
+                        </a>
+                    {% endif %}
+                </div>
+
+                <!-- Botão do menu mobile -->
+                <div class="lg:hidden">
+                    <button id="menu-toggle" class="p-2 text-gray-700 focus:outline-none">
+                        <span class="sr-only">Abrir menu</span>
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
+            </nav>
+
+            <!-- Menu Mobile -->
+            <nav id="menu" class="hidden absolute top-16 left-0 w-full bg-white shadow-md p-4 lg:hidden">
+                <ul class="space-y-2">
+                    <li><a href="{% url 'home' %}" class="block text-sm font-semibold text-gray-900 hover:text-indigo-600">Início</a></li>
+                    <li><a href="#" class="block text-sm font-semibold text-gray-900 hover:text-indigo-600">Sobre</a></li>
+                    <li><a href="#" class="block text-sm font-semibold text-gray-900 hover:text-indigo-600">Serviços</a></li>
+                    <li><a href="#" class="block text-sm font-semibold text-gray-900 hover:text-indigo-600">Contato</a></li>
+                    <li>
+                        {% if not request.user.is_authenticated %}
+                            <a href="{% url 'login' %}" class="block text-sm font-semibold text-gray-900 hover:text-indigo-600">Login</a>
+                        {% else %}
+                            <form action="{% url 'logout' %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="block w-full text-left text-sm font-semibold text-gray-900 hover:text-red-600">Logout</button>
+                            </form>
+                        {% endif %}
+                    </li>
+                    {% if exibir_botao_dashboard %}
+                        <li>
+                            <a href="{% url 'dashboard' %}" class="block px-4 py-2 text-center bg-blue-600 text-white rounded hover:bg-blue-700">
+                                Acessar Dashboard
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </header>
+    </div>
+
+    <div class="container mx-auto p-8 mt-16">
+        <h1 class="text-3xl font-semibold text-center mb-8">Dashboard</h1>
+        
+        <!-- Seção de colaboradores -->
+        <h2 class="text-2xl font-semibold mb-4">Colaboradores</h2>
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <ul class="space-y-4">
+                {% for colaborador in colaboradores %}
+                    <li id="colaborador-{{ colaborador.id }}" 
+                        class="p-4 rounded-lg hover:bg-gray-50 cursor-pointer" 
+                        onclick="exibirDetalhes({{ colaborador.id }})">
+                        <div class="flex items-center">
+                            {% if colaborador.imagem %}
+                                <img src="{{ colaborador.imagem.url }}" alt="Foto de {{ colaborador.nome }}" class="w-12 h-12 rounded-full mr-4">
+                            {% else %}
+                                <span class="w-12 h-12 rounded-full bg-gray-300 mr-4"></span>
+                            {% endif %}
+                            <div>
+                                <h3 class="text-lg font-medium text-gray-800">{{ colaborador.nome }}</h3>
+                                <p class="text-sm text-gray-600">{{ colaborador.email }}</p>
+                            </div>
+                        </div>
+                    </li>
+                {% empty %}
+                    <li class="text-gray-500">Não há colaboradores cadastrados.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Detalhes do Colaborador (aparece ao clicar) -->
+        <div id="detalhesColaborador" class="hidden bg-white rounded-lg shadow-md p-6 mt-8">
+            <h2 class="text-2xl font-semibold mb-4">Detalhes do Colaborador</h2>
+            <div id="colaboradorInfo" class="space-y-4">
+                <!-- As informações do colaborador serão preenchidas aqui via JavaScript -->
+            </div>
+            <div class="mt-6 flex gap-4">
+                <button onclick="abrirEditar()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">Editar</button>
+                <button onclick="deletarColaborador()" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">Deletar</button>
+                <button onclick="fecharDetalhes()" class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500">Fechar</button>
+            </div>
+        </div>
+
+        <!-- Arquivos -->
+        <h2 class="text-2xl font-semibold mt-8 mb-4">Arquivos</h2>
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <ul class="space-y-4">
+                {% for arquivo in arquivos %}
+                    <li class="p-4 rounded-lg hover:bg-gray-50">
+                        <strong class="font-medium text-gray-600">Título:</strong> {{ arquivo.tittle }}<br>
+                        <a class="text-blue-600 hover:underline" href="{{ arquivo.file.url }}" target="_blank">Baixar Arquivo</a>
+                    </li>
+                {% empty %}
+                    <li class="text-gray-500">Não há arquivos enviados.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Função para exibir os detalhes do colaborador
+        function exibirDetalhes(colaboradorId) {
+            fetch(`/colaboradores/${colaboradorId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    const colaboradorInfo = document.getElementById('colaboradorInfo');
+                    colaboradorInfo.innerHTML = `
+                        <div><strong class="font-medium text-gray-600">Nome:</strong> ${data.nome}</div>
+                        <div><strong class="font-medium text-gray-600">Email:</strong> ${data.email}</div>
+                        <div><strong class="font-medium text-gray-600">Telefone:</strong> ${data.telefone}</div>
+                        <div><strong class="font-medium text-gray-600">Idade:</strong> ${data.idade}</div>
+                        <div><strong class="font-medium text-gray-600">CPF:</strong> ${data.cpf}</div>
+                        <div><strong class="font-medium text-gray-600">Texto:</strong> ${data.texto}</div>
+                    `;
+                    document.getElementById('detalhesColaborador').classList.remove('hidden');
+                })
+                .catch(error => console.error('Erro ao buscar detalhes:', error));
+        }
+
+        // Função para fechar os detalhes do colaborador
+        function fecharDetalhes() {
+            document.getElementById('detalhesColaborador').classList.add('hidden');
+        }
+
+        // Função para abrir a edição do colaborador
+        function abrirEditar() {
+            const colaboradorId = document.getElementById('colaboradorInfo').dataset.id;
+            window.location.href = `/colaboradores/${colaboradorId}/editar/`;
+        }
+
+        // Função para deletar o colaborador
+        function deletarColaborador() {
+            const colaboradorId = document.getElementById('colaboradorInfo').dataset.id;
+            if (confirm("Tem certeza que deseja deletar este colaborador?")) {
+                fetch(`/colaboradores/${colaboradorId}/deletar/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}', // Adicione o token CSRF
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Colaborador deletado com sucesso!");
+                        window.location.href = "/colaboradores/";
+                    } else {
+                        alert("Erro ao deletar colaborador.");
+                    }
+                })
+                .catch(error => console.error('Erro ao deletar:', error));
+            }
+        }
+    </script>
+
+    <script src="{% static 'dashboard/js/js.js' %}"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</body>
+</html>

@@ -1,0 +1,231 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <link rel="stylesheet" href="{% static 'bootstrap/cssbots/bootstrap.min.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'home/css/home.css' %}">
+    <title>Home</title>
+</head>
+<body>
+    <div class="bg-white">
+        <header class="absolute inset-x-0 top-0 z-50">
+            <nav class="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
+                <div class="flex lg:flex-1">
+                    <a href="{% url 'home' %}" class="-m-1.5 p-1.5">
+                        <span class="sr-only">Your Company</span>
+                        
+                        <img class="h-8 w-auto" src="https://tailwindui.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="">
+                    </a>
+                    <h1 class="LogoNome">Bio Energia</h1>
+                </div>
+              
+                <div class="flex lg:hidden">
+                    <button id="menu-toggle" type="button" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="hidden lg:flex lg:gap-x-12">
+                    <a href="#" class="text-sm font-semibold text-gray-900"></a>
+                    <a href="#" class="text-sm font-semibold text-gray-900"></a>
+                    <a href="#" class="text-sm font-semibold text-gray-900"></a>
+                    <a href="#" class="text-sm font-semibold text-gray-900"></a>
+                </div>
+                <div class="hidden lg:flex lg:flex-1 lg:justify-end">
+                    <a href="#" class="text-sm font-semibold text-gray-900">Log in <span aria-hidden="true">&rarr;</span></a>
+                </div>
+                
+            </nav>
+        </header>
+    
+        <!-- Mobile menu -->
+        <nav id="menu" class="hidden absolute top-16 left-0 w-full bg-white shadow-md p-4 lg:hidden">
+            <ul class="space-y-2">
+                <li><a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-200">Home</a></li>
+                <li><a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-200">Sobre</a></li>
+                <li><a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-200">Vagas</a></li>
+                <li><a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-200">Contato</a></li>
+            </ul>
+        </nav>
+    </div>
+
+
+
+    <div id="whale"></div>
+    <script src="{% static '/index/js/jquery.js'%}"></script>
+    <script src="{% static '/index/js/interactive-whale.js'%}"></script>
+
+
+
+    <div class="container">
+        <form action="{% url 'ver_home' %}" method="post"  enctype="multipart/form-data" class="container mt-4"  >
+            {% csrf_token %} 
+            
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">@</span>
+                <input type="text" name="nome" class="form-control" placeholder="Digite seu nome" aria-label="Nome" aria-describedby="basic-addon1" required>
+            </div>
+            
+            <div class="input-group mb-3">
+                <input type="email" name="email" class="form-control" placeholder="Digite seu email" aria-label="Email" aria-describedby="basic-addon2" required>
+                <span class="input-group-text" id="basic-addon2">@example.com</span>
+            </div>
+            
+            <div class="mb-3">
+                <label for="telefone" class="form-label">Telefone</label>
+                <div class="input-group">
+                    <span class="input-group-text" id="basic-addon3">+55</span>
+                    <input type="tel" name="telefone" class="form-control" id="telefone" placeholder="Digite seu telefone" aria-describedby="basic-addon3" required>
+                </div>
+            </div>
+            
+            <div class="input-group mb-3">
+                <span class="input-group-text">Idade</span>
+                <input type="number" name="idade" class="form-control" placeholder="Digite sua idade" required>
+            </div>
+            
+            <div class="input-group mb-3">
+                <span class="input-group-text">CPF</span>
+                <input type="text" name="cpf" class="form-control" placeholder="Digite seu CPF" required>
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text">Texto</span>
+                <input type="text" name="texto" class="form-control" placeholder="Digite por qual motivo se encaixa na empresa." required>
+            </div>
+            
+            <div class="input-group mb-3">
+                <input type="file" name="arquivo" class="form-control" id="file-input" required>
+            </div>
+            
+            <button type="submit" class="btn btn-primary w-100">Enviar</button>
+        </form>
+    
+        
+        {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-primary{% endif %} d-flex align-items-center" role="alert">
+                <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:" width="20" height="20">
+                    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                </svg>
+                <div>
+                    {{ message }}
+                </div>
+            </div>
+        {% endfor %}
+     {% endif %}
+    </div>
+
+
+    <!-- JavaScript para impedir upload de arquivos maiores que 20MB -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("file-input").addEventListener("change", function() {
+                let file = this.files[0];
+                let maxSize = 20 * 1024 * 1024;  // 20MB
+
+                if (file && file.size > maxSize) {
+                    alert("O arquivo é muito grande! O tamanho máximo permitido é 20MB.");
+                    this.value = "";  // Apaga o campo de upload
+                }
+            });
+        });
+    </script>
+
+    <section class="footer" style="">
+        <div class="container text-center text-md-start mt-5">
+          <!-- Grid row -->
+          <div class="row mt-3">
+            <!-- Grid column -->
+            <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+              <!-- Content -->
+              <h6 class="text-uppercase fw-bold mb-4">
+                <i class="fas fa-gem me-3"></i>Company name
+              </h6>
+              <p>
+                Here you can use rows and columns to organize your footer content. Lorem ipsum
+                dolor sit amet, consectetur adipisicing elit.
+              </p>
+            </div>
+            <!-- Grid column -->
+    
+            <!-- Grid column -->
+            <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+              <!-- Links -->
+              <h6 class="text-uppercase fw-bold mb-4">
+                Products
+              </h6>
+              <p>
+                <a href="#!" class="text-reset">Angular</a>
+              </p>
+              <p>
+                <a href="#!" class="text-reset">React</a>
+              </p>
+              <p>
+                <a href="#!" class="text-reset">Vue</a>
+              </p>
+              <p>
+                <a href="#!" class="text-reset">Laravel</a>
+              </p>
+            </div>
+            <!-- Grid column -->
+    
+            <!-- Grid column -->
+            <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+              <!-- Links -->
+              <h6 class="text-uppercase fw-bold mb-4">
+                Useful links
+              </h6>
+              <p>
+                <a href="#!" class="text-reset">Pricing</a>
+              </p>
+              <p>
+                <a href="#!" class="text-reset">Settings</a>
+              </p>
+              <p>
+                <a href="#!" class="text-reset">Orders</a>
+              </p>
+              <p>
+                <a href="#!" class="text-reset">Help</a>
+              </p>
+            </div>
+            <!-- Grid column -->
+    
+            <!-- Grid column -->
+            <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+              <!-- Links -->
+              <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+              <p><i class="fas fa-home me-3"></i> New York, NY 10012, US</p>
+              <p>
+                <i class="fas fa-envelope me-3"></i>
+                info@example.com
+              </p>
+              <p><i class="fas fa-phone me-3"></i> + 01 234 567 88</p>
+              <p><i class="fas fa-print me-3"></i> + 01 234 567 89</p>
+            </div>
+            <!-- Grid column -->
+          </div>
+          <!-- Grid row -->
+        </div>
+      </section>
+      <!-- Section: Links  -->
+    
+      <!-- Copyright -->
+      <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+        © 2021 Copyright:
+        <a class="text-reset fw-bold" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+      </div>
+      <!-- Copyright -->
+    </footer>
+
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{% static 'bootstrap/jsbots/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+h1{
+    color: rgb(31, 91, 202);
+}
+.Banner{
+    margin-right: -1000px;
+    width: 100%;
+    filter: brightness(50%);
+}
+
+.container{
+    margin-top: 10%;
+}
+
+.footer{
+    margin-top: 20%;
+}
+
