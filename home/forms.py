@@ -4,4 +4,4 @@ from .models import Colaborador
 class ColaboradorForm(forms.ModelForm):
     class Meta:
         model = Colaborador
-        fields = ['nome', 'email', 'telefone', 'idade', 'cpf', 'texto']
+        fields = ['nome', 'email', 'telefone', 'idade',]

@@ -20,8 +20,6 @@ def ver_home(request):
         email = request.POST.get('email')
         telefone = request.POST.get('telefone')
         idade = request.POST.get('idade')
-        cpf = request.POST.get('cpf')
-        texto = request.POST.get('texto')
         file = request.FILES.get('arquivo')
 
        
@@ -30,7 +28,7 @@ def ver_home(request):
             return render(request, 'home.html')
 
        
-        colaborador = Colaborador(nome=nome, email=email, telefone=telefone, idade=idade, cpf=cpf, texto=texto)
+        colaborador = Colaborador(nome=nome, email=email, telefone=telefone, idade=idade,)
         colaborador.save()
 
        
