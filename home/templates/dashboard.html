@@ -121,7 +121,8 @@
                 <!-- As informações do colaborador serão preenchidas aqui via JavaScript -->
             </div>
             <div class="mt-6 flex gap-4">
-            
+                <button onclick="abrirEditar()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">Editar</button>
+                <button onclick="deletarColaborador()" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">Deletar</button>
                 <button onclick="fecharDetalhes()" class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500">Fechar</button>
             </div>
         </div>
@@ -140,27 +141,31 @@
                 {% endfor %}
             </ul>
         </div>
-    </div> exibirDetalhes   
+    </div>
 
     <script>
         // Função para exibir os detalhes do colaborador
-        function abrirModal(detalhes) {
-        const modal = document.getElementById('modalDetalhes');
-        const colaboradorInfo = document.getElementById('colaboradorInfo');
-        colaboradorInfo.innerHTML = `
-            <div><strong class="font-medium text-gray-600">Nome:</strong> ${detalhes.nome}</div>
-            <div><strong class="font-medium text-gray-600">Email:</strong> ${detalhes.email}</div>
-            <div><strong class="font-medium text-gray-600">Telefone:</strong> ${detalhes.telefone}</div>
-            <div><strong class="font-medium text-gray-600">Idade:</strong> ${detalhes.idade}</div>
-            <div><strong class="font-medium text-gray-600">Texto:</strong> ${detalhes.texto}</div>
-        `;
-        modal.classList.remove('hidden');
-    }
+        function exibirDetalhes(colaboradorId) {
+            const colaborador = {
+                id: colaboradorId,
+                nome: "Nome do Colaborador",
+                email: "email@example.com",
+                telefone: "(11) 99999-9999",
+                idade: 30,
+                cpf: "123.456.789-00",
+                texto: "Texto de exemplo sobre o colaborador."
+            };
 
-    function fecharModal() {
-        const modal = document.getElementById('modalDetalhes');
-        modal.classList.add('hidden');
-    }
+            const colaboradorInfo = document.getElementById('colaboradorInfo');
+            colaboradorInfo.innerHTML = `
+                <div><strong class="font-medium text-gray-600">Nome:</strong> ${colaborador.nome}</div>
+                <div><strong class="font-medium text-gray-600">Email:</strong> ${colaborador.email}</div>
+                <div><strong class="font-medium text-gray-600">Telefone:</strong> ${colaborador.telefone}</div>
+                <div><strong class="font-medium text-gray-600">Idade:</strong> ${colaborador.idade}</div>
+            `;
+
+            document.getElementById('detalhesColaborador').classList.remove('hidden');
+        }
 
         // Função para fechar os detalhes do colaborador
         function fecharDetalhes() {
