@@ -139,38 +139,3 @@ def listar_colaboradores(request):
     colaboradores = Colaborador.objects.all()
     return render(request, 'dashboard.html', {'colaboradores': colaboradores})
 
-# Detalhes de um colaborador (retorna JSON para o AJAX)
-def detalhes_colaborador(request, id):
-    colaborador = get_object_or_404(Colaborador, id=id)
-    data = {
-        'id': colaborador.id,
-        'nome': colaborador.nome,
-        'email': colaborador.email,
-        'telefone': colaborador.telefone,
-        'idade': colaborador.idade,
-        'cpf': colaborador.cpf,
-        'texto': colaborador.texto,
-    }
-    return JsonResponse(data)
-
-# Editar um colaborador
-def editar_colaborador(request, id):
-    colaborador = get_object_or_404(Colaborador, id=id)
-    if request.method == 'POST':
-        form = ColaboradorForm(request.POST, request.FILES, instance=colaborador)
-        if form.is_valid():
-            form.save()
-            return JsonResponse({'success': True})
-        else:
-            return JsonResponse({'success': False, 'errors': form.errors})
-    else:
-        form = ColaboradorForm(instance=colaborador)
-    return render(request, 'editar_colaborador.html', {'form': form})
-
-# Deletar um colaborador
-def deletar_colaborador(request, id):
-    colaborador = get_object_or_404(Colaborador, id=id)
-    if request.method == 'POST':
-        colaborador.delete()
-        return JsonResponse({'success': True})
-    return JsonResponse({'success': False, 'error': 'Método não permitido.'})
